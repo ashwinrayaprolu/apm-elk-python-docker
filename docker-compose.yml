@@ -1,0 +1,70 @@
+version: "3"
+services:
+  apm-server:
+    container_name: apm-server
+    image: store/elastic/apm-server:7.2.0
+    ports:
+      - "8200:8200"
+    networks:
+      - lab-network
+  
+  django-app:
+    container_name: django
+    image: django
+    ports:
+      - "8000:8000"
+    volumes:
+      #The commented sections below enable Metricbeat to monitor the Docker host rather than the Metricbeat container. These are used by the system module.
+      - /proc:/hostfs/proc:ro
+      - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
+      #Allows us to report on docker from the hosts information.
+      - /var/run/docker.sock:/var/run/docker.sock
+      #We mount the host filesystem so we can report on disk usage with the system module.
+      - /:/hostfs:ro
+    command: python --version
+    networks:
+      - lab-network
+      
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.io/elasticsearch:6.7.2
+    environment:
+            discovery.type: single-node
+            
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+    networks:
+      - lab-network
+    healthcheck:
+      test: ["CMD", "curl","-s" ,"-f", "http://localhost:9200/_cat/health"]
+
+  kibana:
+    container_name: kibana
+    hostname: kibana
+    image: docker.io/kibana:6.7.2
+    #volumes:
+    #  - ./kibana.yml:/usr/share/kibana/kibana.yml
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports: ['5601:5601']
+    networks: ['lab-network']
+    depends_on: ["elasticsearch"]
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "curl", "-s", "-f", "http://localhost:5601/"]
+      retries: 6
+
+volumes:
+  esdata:
+    driver: local
+
+networks:
+  lab-network:
+

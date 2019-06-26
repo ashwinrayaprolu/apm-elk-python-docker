@@ -8,9 +8,9 @@ services:
     networks:
       - lab-network
   
-  django-app:
-    container_name: django
-    image: django
+  django-agent-elk:
+    container_name: django-agent-elk
+    image: lyonn/django-agent-elk:v2
     ports:
       - "8000:8000"
     volumes:
@@ -21,7 +21,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       #We mount the host filesystem so we can report on disk usage with the system module.
       - /:/hostfs:ro
-    command: python --version
+    
     networks:
       - lab-network
       

@@ -16,7 +16,7 @@ services:
   
   django-agent-elk:
     container_name: django-agent-elk-container
-    image: lyonn/django-agent-elk:testv3
+    image: lyonn/django-agent-elk:v6
     ports:
       - "8000:8000"
     depends_on: ["apm-server"]
@@ -31,7 +31,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       #We mount the host filesystem so we can report on disk usage with the system module.
       - /:/hostfs:ro
-    
     networks:
       - lab-network
       
@@ -65,7 +64,8 @@ services:
     environment:
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
     ports: ['5601:5601']
-    networks: ['lab-network']
+    networks:
+      - lab-network
     depends_on: ["elasticsearch"]
     restart: on-failure
     healthcheck:

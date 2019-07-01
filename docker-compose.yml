@@ -10,7 +10,7 @@ services:
     depends_on: ["elasticsearch", "kibana"]
     volumes:
       - ./apm-conf/apm-server.yml:/usr/share/apm-server/apm-server.yml
-    command: /usr/share/apm-server/apm-server -e -c /usr/share/apm-server/apm-server.yml -E apm-server.host=apm-server:8200 --strict.perms=false
+    command: /usr/share/apm-server/apm-server -e -c /usr/share/apm-server/apm-server.yml -E apm-server.host=apm-server:7200 --strict.perms=false
     networks: 
       - lab-network
   

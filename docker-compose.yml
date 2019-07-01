@@ -1,20 +1,30 @@
 version: "3"
 services:
+
   apm-server:
-    container_name: apm-server
-    image: store/elastic/apm-server:7.2.0
+    container_name: apm-server-container
+    image: store/elastic/apm-server:6.7.2
+    user: root
     ports:
-      - "8200:8200"
-    networks:
+      - "7200:7200"
+    depends_on: ["elasticsearch"]
+    volumes:
+      - /home/lyonn/lab/apm-elk-python-docker/apm-conf/apm-server.yml:/usr/share/apm-server/apm-server.yml
+    command: /usr/share/apm-server/apm-server -e -c /usr/share/apm-server/apm-server.yml --strict.perms=false
+    networks: 
       - lab-network
   
   django-agent-elk:
-    container_name: django-agent-elk
-    image: lyonn/django-agent-elk:v2
+    container_name: django-agent-elk-container
+    image: lyonn/django-agent-elk:v3
     ports:
       - "8000:8000"
+    depends_on: ["apm-server"]
+    environment:
+      - ELASTIC_APM_SERVER_URL=http://apm-server:7200
+      - ELASTIC_APM_SERVER_PORT=7200
     volumes:
-      #The commented sections below enable Metricbeat to monitor the Docker host rather than the Metricbeat container. These are used by the system module.
+      #The commented sections below enables Metricbeat to monitor the Docker host rather than the Metricbeat container. These are used by the system module.
       - /proc:/hostfs/proc:ro
       - /sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro
       #Allows us to report on docker from the hosts information.
@@ -27,7 +37,7 @@ services:
       
 
   elasticsearch:
-    container_name: elasticsearch
+    container_name: elasticsearch-container
     image: docker.io/elasticsearch:6.7.2
     environment:
             discovery.type: single-node
@@ -39,14 +49,15 @@ services:
     volumes:
       - esdata:/usr/share/elasticsearch/data
     ports:
-      - 9200:9200
+      - "9200:9200"
+      - "9300:9300"
     networks:
       - lab-network
     healthcheck:
       test: ["CMD", "curl","-s" ,"-f", "http://localhost:9200/_cat/health"]
 
   kibana:
-    container_name: kibana
+    container_name: kibana-container
     hostname: kibana
     image: docker.io/kibana:6.7.2
     #volumes:
@@ -60,11 +71,9 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-s", "-f", "http://localhost:5601/"]
       retries: 6
-
 volumes:
   esdata:
     driver: local
-
 networks:
   lab-network:
 

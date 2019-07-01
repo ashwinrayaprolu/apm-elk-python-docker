@@ -31,7 +31,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       #We mount the host filesystem so we can report on disk usage with the system module.
       - /:/hostfs:ro
-    command: 
     networks:
       - lab-network
       

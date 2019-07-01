@@ -33,6 +33,8 @@ services:
       - /:/hostfs:ro
     networks:
       - lab-network
+    links:
+      - "apm-server:apm-server"
       
 
   elasticsearch:

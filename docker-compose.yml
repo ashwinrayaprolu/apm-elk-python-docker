@@ -16,7 +16,7 @@ services:
   
   django-agent-elk:
     container_name: django-agent-elk-container
-    image: lyonn/django-agent-elk:v6
+    image: lyonn/django-agent-elk:demo
     ports:
       - "8000:8000"
     depends_on: ["apm-server"]
@@ -74,7 +74,7 @@ services:
 volumes:
   esdata:
     driver: local
-    
+
 networks:
   lab-network:
 

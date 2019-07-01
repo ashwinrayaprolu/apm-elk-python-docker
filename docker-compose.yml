@@ -77,6 +77,4 @@ volumes:
   esdata:
     driver: local
 
-networks: 
-  lab-network:
 

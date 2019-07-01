@@ -7,10 +7,10 @@ services:
     user: root
     ports:
       - "7200:7200"
-    depends_on: ["elasticsearch"]
+    depends_on: ["elasticsearch", "kibana"]
     volumes:
       - /home/lyonn/lab/apm-elk-python-docker/apm-conf/apm-server.yml:/usr/share/apm-server/apm-server.yml
-    command: /usr/share/apm-server/apm-server -e -c /usr/share/apm-server/apm-server.yml --strict.perms=false
+    command: /usr/share/apm-server/apm-server -e -c /usr/share/apm-server/apm-server.yml -E apm-server.host=apm-server:8200 --strict.perms=false
     networks: 
       - lab-network
   

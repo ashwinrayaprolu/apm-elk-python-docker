@@ -40,7 +40,6 @@ services:
     image: docker.io/elasticsearch:6.7.2
     environment:
             discovery.type: single-node
-            
     ulimits:
       memlock:
         soft: -1
@@ -50,10 +49,10 @@ services:
     ports:
       - "9200:9200"
       - "9300:9300"
-    networks:
-      - lab-network
     healthcheck:
       test: ["CMD", "curl","-s" ,"-f", "http://localhost:9200/_cat/health"]
+    networks:
+      - lab-network
 
   kibana:
     container_name: kibana-container
@@ -64,16 +63,18 @@ services:
     environment:
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
     ports: ['5601:5601']
-    networks:
-      - lab-network
     depends_on: ["elasticsearch"]
     restart: on-failure
     healthcheck:
       test: ["CMD", "curl", "-s", "-f", "http://localhost:5601/"]
       retries: 6
+  networks:
+      - lab-network
+          
 volumes:
   esdata:
     driver: local
+    
 networks:
   lab-network:
 

@@ -21,8 +21,8 @@ services:
       - "8000:8000"
     depends_on: ["apm-server"]
     environment:
-      ELASTIC_APM_SERVER_URL: http://apm-server:7200
-      ELASTIC_APM_SERVER_PORT: 7200
+      - ELASTIC_APM_SERVER_URL=http://apm-server:7200
+      - ELASTIC_APM_SERVER_PORT=7200
     volumes:
       #The commented sections below enables Metricbeat to monitor the Docker host rather than the Metricbeat container. These are used by the system module.
       - /proc:/hostfs/proc:ro

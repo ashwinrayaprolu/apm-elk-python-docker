@@ -13,6 +13,9 @@ services:
     command: /usr/share/apm-server/apm-server -e -c /usr/share/apm-server/apm-server.yml -E apm-server.host=apm-server:7200 --strict.perms=false
     #networks: 
      # - lab-network
+    healthcheck:
+      test: ["CMD", "curl", "-s", "-f", "http://localhost:7200/"]
+      retries: 6
   
   django-agent-elk:
     container_name: django-agent-elk-container
@@ -35,6 +38,9 @@ services:
      # - lab-network
     links:
       - "apm-server:apm-server"
+    healthcheck:
+      test: ["CMD", "curl", "-s", "-f", "http://localhost:8000/"]
+      retries: 6
       
 
   elasticsearch:

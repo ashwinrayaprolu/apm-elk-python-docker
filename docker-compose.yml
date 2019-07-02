@@ -4,7 +4,7 @@ services:
   apm-server:
     container_name: apm-server-container
     image: store/elastic/apm-server:6.7.2
-    user: root
+    user: apm-server
     ports:
       - "7200:7200"
     depends_on: ["elasticsearch", "kibana"]

@@ -53,8 +53,8 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - ./hearbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml
-      - ./hearbeat/monitors.d:/usr/share/heartbeat/monitors.d
+      - ./heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml
+      - ./heartbeat/monitors.d:/usr/share/heartbeat/monitors.d
     command: /usr/share/heartbeat/heartbeat setup -E setup.kibana.host=kibana:5601
     command: /usr/share/heartbeat/heartbeat -e -c /usr/share/heartbeat/heartbeat.yml --strict.perms=false
     networks:

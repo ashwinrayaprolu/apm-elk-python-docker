@@ -95,9 +95,32 @@ services:
       retries: 6
     networks:
       - lab-network
+
+  grafana:
+    container_name: grafana-container
+    hostname: grafana
+    image: grafana/grafana:6.4.3
+    user: root
+    #volumes:
+    #  - grafanadata:/var/lib/grafana
+    environment:
+      GF_SERVER_ROOT_URL: http://grafana:3000
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: secret
+      
+    ports: ['3000:3000']
+    depends_on: ["elasticsearch"]
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "curl", "-s", "-f", "http://localhost:3000/"]
+      retries: 6
+    networks:
+      - lab-network
           
 volumes:
   esdata:
+    driver: local
+  grafanadata:
     driver: local
 
 networks: 

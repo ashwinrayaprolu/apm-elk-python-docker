@@ -1,0 +1,9 @@
+- type: http
+  name: djangopollsexample
+  urls: ["http://django-agent-elk:8000/polls"]
+  schedule: "@every 10s"
+  timeout: 30s
+  tags: ["django"]
+  check.response:
+    status: 200
+    body: 'polls'

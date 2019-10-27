@@ -1,0 +1,9 @@
+- type: http
+  name: jsonplaceholderusersAntonetta
+  urls: ["https://jsonplaceholder.typicode.com/users"]
+  schedule: "@every 10s"
+  timeout: 10s
+  tags: ["Antonette"]
+  check.response:
+    status: 200
+    body: 'Antonette'

@@ -1,0 +1,7 @@
+- type: http
+  name: jsonplaceholderexample
+  urls: ["https://jsonplaceholder.typicode.com/todos/1"]
+  schedule: "@every 10s"
+  timeout: 10s
+  check.response.status: 200
+  tags: ["example", "json"]

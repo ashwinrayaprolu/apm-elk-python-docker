@@ -1,6 +1,6 @@
 version: "3"
-services:
 
+services:
   apm-server:
     container_name: apm-server-container
     image: store/elastic/apm-server:7.2.1
@@ -54,6 +54,7 @@ services:
         hard: -1
     volumes:
       - ./hearbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml
+      - ./hearbeat/monitors.d:/usr/share/heartbeat/monitors.d
     command: /usr/share/heartbeat/heartbeat setup -E setup.kibana.host=kibana:5601
     command: /usr/share/heartbeat/heartbeat -e -c /usr/share/heartbeat/heartbeat.yml --strict.perms=false
     networks:

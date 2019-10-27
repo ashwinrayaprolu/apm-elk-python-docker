@@ -1,6 +1,6 @@
 version: "3"
-services:
 
+services:
   apm-server:
     container_name: apm-server-container
     image: store/elastic/apm-server:7.2.1
@@ -43,7 +43,22 @@ services:
     healthcheck:
       test: ["CMD", "curl", "-s", "-f", "http://localhost:8000/polls"]
       retries: 6
-      
+    
+  heartbeat:
+    container_name: heartbeat-container
+    image: store/elastic/heartbeat:7.2.1
+    user: heartbeat
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./hearbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml
+      - ./hearbeat/monitors.d:/usr/share/heartbeat/monitors.d
+    command: /usr/share/heartbeat/heartbeat setup -E setup.kibana.host=kibana:5601
+    command: /usr/share/heartbeat/heartbeat -e -c /usr/share/heartbeat/heartbeat.yml --strict.perms=false
+    networks:
+      - lab-network
 
   elasticsearch:
     container_name: elasticsearch-container

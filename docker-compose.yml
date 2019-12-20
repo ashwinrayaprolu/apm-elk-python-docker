@@ -47,7 +47,7 @@ services:
   heartbeat:
     container_name: heartbeat-container
     image: store/elastic/heartbeat:7.2.1
-    user: root
+    user: heartbeat
     ulimits:
       memlock:
         soft: -1
@@ -55,8 +55,6 @@ services:
     volumes:
       - ./heartbeat/heartbeat.yml:/usr/share/heartbeat/heartbeat.yml
       - ./heartbeat/monitors.d:/usr/share/heartbeat/monitors.d
-    command: "chown -R heartbeat: /usr/share/heartbeat"
-    user: heartbeat
     command: /usr/share/heartbeat/heartbeat setup -E setup.kibana.host=kibana:5601
     command: /usr/share/heartbeat/heartbeat -e -c /usr/share/heartbeat/heartbeat.yml --strict.perms=false
     networks:
@@ -103,8 +101,8 @@ services:
     hostname: grafana
     image: grafana/grafana:6.4.3
     user: root
-    volumes:
-      - ./grafana/defaults.ini:/usr/share/grafana/conf/defaults.ini
+    #volumes:
+    #  - grafanadata:/var/lib/grafana
     environment:
       GF_SERVER_ROOT_URL: http://grafana:3000
       GF_SECURITY_ADMIN_USER: admin

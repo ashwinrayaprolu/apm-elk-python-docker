@@ -1,4 +1,2 @@
 https://mxfcvlrhspro001.mx.corp/rhn/Login.do 
-http://srvidtfpvlmx10.mx.corp:8081
-http://srvidtfpvlmx10.mx.corp:8080
 https://google.com.mx
